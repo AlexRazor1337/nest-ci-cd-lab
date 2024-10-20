@@ -5,14 +5,14 @@ export class CreateSaleDto {
   productId: number;
 
   @IsDate()
-  saleDate: Date;
+  date: Date;
 
   @IsString()
-  customerLastName: string;
+  lastName: string;
 
   @IsString()
-  customerFirstName: string;
+  firstName: string;
 
   @IsString()
-  customerMiddleName: string;
+  middleName: string;
 }

@@ -4,7 +4,7 @@ export class CreateMaterialDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(1)
-  material_code: string;
+  materialCode: string;
 
   @IsString()
   @IsNotEmpty()
@@ -13,5 +13,5 @@ export class CreateMaterialDto {
 
   @IsNumber()
   @Min(0)
-  price_per_gram: number;
+  pricePerGram: number;
 }
