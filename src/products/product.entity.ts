@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { Material } from '../materials/material.entity';
 import { ProductMaterial } from 'src/product-materials/product-material.entity';
 
 export enum ProductType {
