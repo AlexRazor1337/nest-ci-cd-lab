@@ -11,10 +11,10 @@ export enum ProductType {
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  product_id: number;
+  id: number;
 
   @Column({ unique: true })
-  product_code: string;
+  productCode: string;
 
   @Column()
   name: string;
@@ -26,7 +26,7 @@ export class Product {
   type: ProductType;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  total_weight: number;
+  totalWeight: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;

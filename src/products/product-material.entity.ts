@@ -14,5 +14,5 @@ export class ProductMaterial {
   material: Material;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  weight_used: number;
+  weightUsed: number;
 }

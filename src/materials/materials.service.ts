@@ -21,7 +21,7 @@ export class MaterialsService {
   }
 
   findOne(id: number): Promise<Material> {
-    return this.materialsRepository.findOneOrFail({ where: { material_id: id } });
+    return this.materialsRepository.findOneOrFail({ where: { id: id } });
   }
 
   async update(id: number, updateMaterialDto: UpdateMaterialDto): Promise<Material> {

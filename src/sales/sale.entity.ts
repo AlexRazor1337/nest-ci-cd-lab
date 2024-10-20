@@ -4,20 +4,20 @@ import { Product } from '../products/product.entity';
 @Entity()
 export class Sale {
   @PrimaryGeneratedColumn()
-  sale_id: number;
+  id: number;
 
   @ManyToOne(() => Product)
   product: Product;
 
   @Column('date')
-  sale_date: Date;
+  date: Date;
 
   @Column()
-  customer_last_name: string;
+  lastName: string;
 
   @Column()
-  customer_first_name: string;
+  firstName: string;
 
   @Column()
-  customer_middle_name: string;
+  middleName: string;
 }

@@ -5,16 +5,16 @@ import { ProductMaterial } from 'src/products/product-material.entity';
 @Entity()
 export class Material {
   @PrimaryGeneratedColumn()
-  material_id: number;
+  id: number;
 
   @Column({ unique: true })
-  material_code: string;
+  materialCode: string;
 
   @Column()
   name: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  price_per_gram: number;
+  pricePerGram: number;
 
   @OneToMany(() => ProductMaterial, productMaterial => productMaterial.material)
   productMaterials: ProductMaterial[];
