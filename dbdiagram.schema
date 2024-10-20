@@ -1,0 +1,44 @@
+// Enum for product types
+Enum product_type {
+  earrings
+  rings
+  brooches
+  bracelets
+}
+
+Table Products {
+  product_id INT [pk, increment]
+  product_code VARCHAR(20) [unique]
+  name VARCHAR(100)
+  type product_type
+  total_weight DECIMAL(10, 2)
+  price DECIMAL(10, 2)
+}
+
+Table Materials {
+  material_id INT [pk, increment]
+  material_code VARCHAR(20) [unique]
+  name VARCHAR(50)
+  price_per_gram DECIMAL(10, 2)
+}
+
+Table ProductMaterials {
+  product_id INT
+  material_id INT
+  weight_used DECIMAL(10, 2)
+  
+  PRIMARY KEY (product_id, material_id)
+}
+
+Table Sales {
+  sale_id INT [pk, increment]
+  product_id INT
+  sale_date DATE
+  customer_last_name VARCHAR(50)
+  customer_first_name VARCHAR(50)
+  customer_middle_name VARCHAR(50)
+}
+
+Ref: ProductMaterials.product_id > Products.product_id
+Ref: ProductMaterials.material_id > Materials.material_id
+Ref: Sales.product_id > Products.product_id
