@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { ProductMaterial } from 'src/product-materials/product-material.entity';
+import { ProductMaterial } from 'src/products/product-material.entity';
 
 export enum ProductType {
   EARRINGS = 'earrings',

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from 'typeorm';
 import { Product } from '../products/product.entity';
-import { ProductMaterial } from 'src/product-materials/product-material.entity';
+import { ProductMaterial } from 'src/products/product-material.entity';
 
 @Entity()
 export class Material {

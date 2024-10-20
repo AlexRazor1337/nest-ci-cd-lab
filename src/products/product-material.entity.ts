@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Product } from '../products/product.entity';
+import { Product } from './product.entity';
 import { Material } from '../materials/material.entity';
 
 @Entity()
