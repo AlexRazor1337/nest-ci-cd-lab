@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sale } from './sale.entity';
+import { CreateSaleDto } from './dto/create-sale.dto';
 
 @Injectable()
 export class SalesService {
@@ -10,7 +11,7 @@ export class SalesService {
     private readonly salesRepository: Repository<Sale>,
   ) {}
 
-  async create(saleData: any): Promise<Sale> {
+  async create(saleData: CreateSaleDto): Promise<Sale> {
     return this.salesRepository.save(saleData);
   }
 
