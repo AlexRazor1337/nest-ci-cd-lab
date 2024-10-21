@@ -7,6 +7,7 @@ import { Sale } from './sale.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Sale])],
   providers: [SalesService],
-  controllers: [SalesController]
+  controllers: [SalesController],
+  exports: [SalesService],
 })
 export class SalesModule {}
