@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product and Material Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alvaromontoro/almond.css@latest/dist/almond.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <style>
+        .container { display: flex; flex-wrap: wrap; justify-content: space-between; }
+        .section { width: 45%; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .pagination { margin-top: 10px; }
+        .pagination button { margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h1>Create Product</h1>
+            <div>
+                <label for="productCode">Product Code:</label>
+                <input type="text" id="productCode" required>
+            </div>
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div>
+                <label for="type">Type:</label>
+                <select id="type" required>
+                    <option value="earrings">Earrings</option>
+                    <option value="rings">Rings</option>
+                    <option value="brooches">Brooches</option>
+                    <option value="bracelets">Bracelets</option>
+                </select>
+            </div>
+            <div>
+                <label for="totalWeight">Total Weight:</label>
+                <input type="number" id="totalWeight" min="0" step="0.01" required>
+            </div>
+            <div>
+                <label for="price">Price:</label>
+                <input type="number" id="price" min="0" step="0.01" required>
+            </div>
+            <h2>Product Materials</h2>
+            <div id="productMaterials">
+                <!-- Product materials will be added here dynamically -->
+            </div>
+            <button onclick="addMaterial()">Add Material</button>
+            <br><br>
+            <button onclick="submitProduct()">Create Product</button>
+        </div>
+
+        <div class="section">
+            <h1>Create Material</h1>
+            <div>
+                <label for="materialCode">Material Code:</label>
+                <input type="text" id="materialCode" required>
+            </div>
+            <div>
+                <label for="materialName">Name:</label>
+                <input type="text" id="materialName" required>
+            </div>
+            <div>
+                <label for="pricePerGram">Price Per Gram:</label>
+                <input type="number" id="pricePerGram" min="0" step="0.01" required>
+            </div>
+            <br>
+            <button onclick="submitMaterial()">Create Material</button>
+        </div>
+
+         <div class="section">
+            <h2>Products List</h2>
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Total Weight</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="productsBody"></tbody>
+            </table>
+            <div id="productsPagination" class="pagination"></div>
+        </div>
+
+        <!-- Material List -->
+        <div class="section">
+            <h2>Materials List</h2>
+            <table id="materialsTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Price Per Gram</th>
+                    </tr>
+                </thead>
+                <tbody id="materialsBody"></tbody>
+            </table>
+            <div id="materialsPagination" class="pagination"></div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Configuration
+        const ITEMS_PER_PAGE = 5;
+
+        // State
+        let materials = [];
+        let products = [];
+        let currentMaterialPage = 1;
+        let currentProductPage = 1;
+
+        const productMaterialsContainer = document.getElementById('productMaterials');
+
+        function fetchMaterials() {
+            axios.get('/api/materials')
+                .then(response => {
+                    materials = response.data;
+                    updateMaterialDropdowns();
+                    renderMaterialsList();
+                })
+                .catch(error => {
+                    console.error('Error fetching materials:', error);
+                    alert('Error fetching materials. Please check the console for details.');
+                });
+        }
+
+        function fetchProducts() {
+            axios.get('/api/products')
+                .then(response => {
+                    products = response.data;
+                    renderProductsList();
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                    alert('Error fetching products. Please check the console for details.');
+                });
+        }
+
+        function getMaterialOptionsHTML() {
+            return materials.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+        }
+
+        function addMaterial() {
+            const materialDiv = document.createElement('div');
+            materialDiv.innerHTML = `
+                <select class="materialId" required>
+                    ${getMaterialOptionsHTML()}
+                </select>
+                <input type="number" class="weightUsed" min="0" step="0.01" placeholder="Weight Used" required>
+                <button onclick="this.parentElement.remove()">Remove</button>
+            `;
+            productMaterialsContainer.appendChild(materialDiv);
+        }
+
+        function submitProduct() {
+            const productData = {
+                productCode: document.getElementById('productCode').value,
+                name: document.getElementById('name').value,
+                type: document.getElementById('type').value,
+                totalWeight: parseFloat(document.getElementById('totalWeight').value),
+                price: parseFloat(document.getElementById('price').value),
+                productMaterials: Array.from(productMaterialsContainer.children).map(div => ({
+                    materialId: parseInt(div.querySelector('.materialId').value),
+                    weightUsed: parseFloat(div.querySelector('.weightUsed').value)
+                }))
+            };
+
+            axios.post('/api/products', productData)
+                .then(response => {
+                    alert('Product created successfully!');
+                    fetchProducts();
+                    // Reset the form
+                    // ... (reset product form fields)
+                })
+                .catch(error => {
+                    console.error('Error creating product:', error);
+                    alert('Error creating product. Please check the console for details.');
+                });
+        }
+
+        function submitMaterial() {
+            const materialData = {
+                materialCode: document.getElementById('materialCode').value,
+                name: document.getElementById('materialName').value,
+                pricePerGram: parseFloat(document.getElementById('pricePerGram').value)
+            };
+
+            axios.post('/api/materials', materialData)
+                .then(response => {
+                    alert('Material created successfully!');
+                    fetchMaterials();
+                    // Reset the form
+                    document.getElementById('materialCode').value = '';
+                    document.getElementById('materialName').value = '';
+                    document.getElementById('pricePerGram').value = '';
+                })
+                .catch(error => {
+                    console.error('Error creating material:', error);
+                    alert('Error creating material. Please check the console for details.');
+                });
+        }
+
+        function updateMaterialDropdowns() {
+            const materialSelects = document.querySelectorAll('.materialId');
+            const optionsHTML = getMaterialOptionsHTML();
+            materialSelects.forEach(select => {
+                select.innerHTML = optionsHTML;
+            });
+        }
+
+        function renderMaterialsList() {
+            const tbody = document.getElementById('materialsBody');
+            const startIndex = (currentMaterialPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const materialsToShow = materials.slice(startIndex, endIndex);
+
+            tbody.innerHTML = materialsToShow.map(m => `
+                <tr>
+                    <td>${m.materialCode}</td>
+                    <td>${m.name}</td>
+                    <td>${m.pricePerGram}</td>
+                </tr>
+            `).join('');
+
+            renderPagination('materialsPagination', materials.length, currentMaterialPage, page => {
+                currentMaterialPage = page;
+                renderMaterialsList();
+            });
+        }
+
+        function renderProductsList() {
+            const tbody = document.getElementById('productsBody');
+            const startIndex = (currentProductPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const productsToShow = products.slice(startIndex, endIndex);
+
+            tbody.innerHTML = productsToShow.map(p => `
+                <tr>
+                    <td>${p.productCode}</td>
+                    <td>${p.name}</td>
+                    <td>${p.type}</td>
+                    <td>${p.totalWeight}g</td>
+                    <td>${p.price}</td>
+                    <td>${p.productMaterials.map(m => m.material.name + '(' + m.weightUsed + 'g)' ).join(', ')}</td>
+                </tr>
+            `).join('');
+
+            renderPagination('productsPagination', products.length, currentProductPage, page => {
+                currentProductPage = page;
+                renderProductsList();
+            });
+        }
+
+        function renderPagination(elementId, totalItems, currentPage, onPageChange) {
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const paginationElement = document.getElementById(elementId);
+            
+            let paginationHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `<button ${i === currentPage ? 'disabled' : ''} onclick="onPageChange(${i})">${i}</button>`;
+            }
+            
+            paginationElement.innerHTML = paginationHTML;
+            paginationElement.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', () => onPageChange(parseInt(button.textContent)));
+            });
+        }
+
+        // Initial fetch of materials and products
+        fetchMaterials();
+        fetchProducts();
+    </script>
+</body>
+</html>

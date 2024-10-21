@@ -18,6 +18,6 @@ export class AppController {
     const materials = await this.materialsService.findAll();
     const sales = await this.salesService.findAll();
 
-    return { products, materials, sales };
+    return { products, sales };
   }
 }
