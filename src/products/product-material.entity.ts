@@ -7,10 +7,18 @@ export class ProductMaterial {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, product => product.productMaterials)
+  @ManyToOne(() => Product, product => product.productMaterials, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   product: Product;
 
-  @ManyToOne(() => Material, material => material.productMaterials)
+  @ManyToOne(() => Material, material => material.productMaterials, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   material: Material;
 
   @Column('decimal', { precision: 10, scale: 2 })

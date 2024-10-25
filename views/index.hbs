@@ -226,6 +226,9 @@
                     <td>${m.materialCode}</td>
                     <td>${m.name}</td>
                     <td>${m.pricePerGram}</td>
+                    <td>
+                        <button onclick="deleteMaterial(${m.id})">Delete</button>
+                    </td>
                 </tr>
             `).join('');
 
@@ -233,6 +236,30 @@
                 currentMaterialPage = page;
                 renderMaterialsList();
             });
+        }
+        
+        function deleteMaterial(materialId) {
+            axios.delete(`/api/materials/${materialId}`)
+                .then(() => {
+                    alert('Material deleted successfully!');
+                    fetchMaterials();
+                })
+                .catch(error => {
+                    console.error('Error deleting material:', error);
+                    alert('Error deleting material. Please check the console for details.');
+                });
+        }
+
+        function deleteProduct(productId) {
+            axios.delete(`/api/products/${productId}`)
+                .then(() => {
+                    alert('Product deleted successfully!');
+                    fetchProducts();
+                })
+                .catch(error => {
+                    console.error('Error deleting product:', error);
+                    alert('Error deleting product. Please check the console for details.');
+                });
         }
 
         function renderProductsList() {
@@ -249,6 +276,9 @@
                     <td>${p.totalWeight}g</td>
                     <td>${p.price}</td>
                     <td>${p.productMaterials.map(m => m.material.name + '(' + m.weightUsed + 'g)' ).join(', ')}</td>
+                    <td>
+                        <button onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
                 </tr>
             `).join('');
 

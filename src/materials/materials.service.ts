@@ -30,6 +30,16 @@ export class MaterialsService {
   }
 
   async remove(id: number): Promise<void> {
+    // Check if material has related products before deleting
+    const material = await this.materialsRepository.findOne({
+      where: { id },
+      relations: ['productMaterials'],
+    })
+
+    if (material.productMaterials.length > 0) {
+      throw new Error('Material has related products. Cannot delete.');
+    }
+
     await this.materialsRepository.delete(id);
   }
 }
