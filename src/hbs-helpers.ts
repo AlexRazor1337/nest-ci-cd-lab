@@ -6,8 +6,6 @@ export function registerHelpers() {
   });
   hbs.registerHelper('json', function (content) {
     return JSON.stringify(content);
-});
+  });
   // You can add more custom helpers here if needed
 }
-
-

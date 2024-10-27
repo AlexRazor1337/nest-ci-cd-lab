@@ -8,5 +8,5 @@ export const databaseConfig: TypeOrmModuleOptions = {
   // dropSchema: true,
   ssl: {
     rejectUnauthorized: false,
-  }
+  },
 };

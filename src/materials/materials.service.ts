@@ -24,7 +24,10 @@ export class MaterialsService {
     return this.materialsRepository.findOneOrFail({ where: { id: id } });
   }
 
-  async update(id: number, updateMaterialDto: UpdateMaterialDto): Promise<Material> {
+  async update(
+    id: number,
+    updateMaterialDto: UpdateMaterialDto,
+  ): Promise<Material> {
     await this.materialsRepository.update(id, updateMaterialDto);
     return this.findOne(id);
   }
@@ -34,7 +37,7 @@ export class MaterialsService {
     const material = await this.materialsRepository.findOne({
       where: { id },
       relations: ['productMaterials'],
-    })
+    });
 
     if (material.productMaterials.length > 0) {
       throw new Error('Material has related products. Cannot delete.');

@@ -1,4 +1,10 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import { Product } from './product.entity';
 import { Material } from '../materials/material.entity';
 
@@ -7,7 +13,7 @@ export class ProductMaterial {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, product => product.productMaterials, {
+  @ManyToOne(() => Product, (product) => product.productMaterials, {
     cascade: true,
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
@@ -15,7 +21,7 @@ export class ProductMaterial {
   @JoinColumn({ name: 'product_id' })
   product: Product;
 
-  @ManyToOne(() => Material, material => material.productMaterials, {
+  @ManyToOne(() => Material, (material) => material.productMaterials, {
     cascade: true,
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',

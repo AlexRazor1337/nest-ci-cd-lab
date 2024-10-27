@@ -1,4 +1,13 @@
-import { IsString, IsNumber, IsEnum, IsNotEmpty, MinLength, Min, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsNotEmpty,
+  MinLength,
+  Min,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ProductType } from '../product.entity';
 

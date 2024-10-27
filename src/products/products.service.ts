@@ -13,7 +13,7 @@ export class ProductsService {
     private productsRepository: Repository<Product>,
     @InjectRepository(ProductMaterial)
     private productMaterialsRepository: Repository<ProductMaterial>,
-  ) { }
+  ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const { productMaterials, ...productData } = createProductDto;
@@ -32,7 +32,9 @@ export class ProductsService {
   }
 
   findAll(): Promise<Product[]> {
-    return this.productsRepository.find({ relations: ['productMaterials', 'productMaterials.material'] });
+    return this.productsRepository.find({
+      relations: ['productMaterials', 'productMaterials.material'],
+    });
   }
 
   findOne(id: number): Promise<Product> {
@@ -48,7 +50,7 @@ export class ProductsService {
       .leftJoinAndSelect('product.productMaterials', 'productMaterials')
       .leftJoinAndSelect('productMaterials.material', 'material')
       .orderBy('product.price', 'DESC')
-      .getOne()
+      .getOne();
   }
 
   findMostProfitable(): Promise<Product> {
@@ -71,7 +73,10 @@ export class ProductsService {
       .getRawOne();
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     await this.productsRepository.update(id, updateProductDto);
     return this.findOne(id);
   }

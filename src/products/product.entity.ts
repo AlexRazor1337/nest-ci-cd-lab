@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ProductMaterial } from 'src/products/product-material.entity';
 import { Sale } from 'src/sales/sale.entity';
 
@@ -32,9 +32,12 @@ export class Product {
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  @OneToMany(() => ProductMaterial, productMaterial => productMaterial.product)
+  @OneToMany(
+    () => ProductMaterial,
+    (productMaterial) => productMaterial.product,
+  )
   productMaterials: ProductMaterial[];
 
-  @OneToMany(() => Sale, sale => sale.product)
+  @OneToMany(() => Sale, (sale) => sale.product)
   sales: Sale[];
 }

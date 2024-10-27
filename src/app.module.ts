@@ -8,7 +8,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(databaseConfig), ProductsModule, MaterialsModule, SalesModule],
+  imports: [
+    TypeOrmModule.forRoot(databaseConfig),
+    ProductsModule,
+    MaterialsModule,
+    SalesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

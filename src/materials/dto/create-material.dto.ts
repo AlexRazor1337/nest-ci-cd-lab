@@ -1,4 +1,10 @@
-import { IsString, IsNumber, IsNotEmpty, MinLength, Min } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  MinLength,
+  Min,
+} from 'class-validator';
 
 export class CreateMaterialDto {
   @IsString()

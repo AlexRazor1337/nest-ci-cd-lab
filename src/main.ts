@@ -14,7 +14,9 @@ async function bootstrap() {
 
   registerHelpers();
 
-  app.setGlobalPrefix('api', { exclude: [{ path: '', method: RequestMethod.ALL}] });
+  app.setGlobalPrefix('api', {
+    exclude: [{ path: '', method: RequestMethod.ALL }],
+  });
 
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
