@@ -13,7 +13,7 @@ export class ProductsService {
     private productsRepository: Repository<Product>,
     @InjectRepository(ProductMaterial)
     private productMaterialsRepository: Repository<ProductMaterial>,
-  ) {}
+  ) { }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const { productMaterials, ...productData } = createProductDto;
@@ -40,6 +40,35 @@ export class ProductsService {
       where: { id },
       relations: ['productMaterials', 'productMaterials.material'],
     });
+  }
+
+  findMostExpensive(): Promise<Product> {
+    return this.productsRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productMaterials', 'productMaterials')
+      .leftJoinAndSelect('productMaterials.material', 'material')
+      .orderBy('product.price', 'DESC')
+      .getOne()
+  }
+
+  findMostProfitable(): Promise<Product> {
+    return this.productsRepository
+      .createQueryBuilder('product')
+      .leftJoin('product.productMaterials', 'productMaterial')
+      .leftJoin('productMaterial.material', 'material')
+      .select('product.id', 'id')
+      .addSelect('product.name', 'name')
+      .addSelect('product.productCode', 'code')
+      .addSelect('product.price', 'price')
+      .addSelect(
+        'product.price - COALESCE(SUM(material.pricePerGram * productMaterial.weightUsed), 0)',
+        'profit',
+      )
+      .groupBy('product.id')
+      .addGroupBy('product.price')
+      .orderBy('profit', 'DESC')
+      .limit(1)
+      .getRawOne();
   }
 
   async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {

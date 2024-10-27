@@ -16,11 +16,22 @@ export class ProductsController {
   findAll() {
     return this.productsService.findAll();
   }
+  
+  @Get('most-expensive')
+  findMostExpensive() {
+    return this.productsService.findMostExpensive();
+  }
 
+  @Get('most-profitable')
+  findMostProfitable() {
+    return this.productsService.findMostProfitable();
+  }
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(+id);
   }
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {

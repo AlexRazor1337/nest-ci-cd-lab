@@ -178,6 +178,22 @@
             </table>
             <div id="salesPagination" class="pagination"></div>
         </div>
+
+        {{!-- Most expensive product --}}
+        <div class="section">
+            <h2>Most Expensive Product</h2>
+            <button onclick="showMostExpensiveProduct()">Show Most Expensive Product</button>
+            <div id="mostExpensiveProduct">
+            </div>
+        </div>
+
+        {{!-- Most profitable product --}}
+        <div class="section">
+            <h2>Most Profitable Product</h2>
+            <button onclick="showMostProfitableProduct()">Show Most Profitable Product</button>
+            <div id="mostProfitableProduct">
+            </div>
+        </div>
     </div>
 
     <script>
@@ -480,6 +496,30 @@
             paginationElement.querySelectorAll('button').forEach(button => {
                 button.addEventListener('click', () => onPageChange(parseInt(button.textContent)));
             });
+        }
+
+        function showMostExpensiveProduct() {
+            axios.get('/api/products/most-expensive')
+                .then(response => {
+                    const mostExpensiveProduct = response.data;
+                    document.getElementById('mostExpensiveProduct').innerHTML = `<p>The most expensive product is: ${mostExpensiveProduct.name} (${mostExpensiveProduct.code}) costing ${mostExpensiveProduct.price}</p>`;
+                })
+                .catch(error => {
+                    console.error('Error fetching most expensive product:', error);
+                    alert('Error fetching most expensive product. Please check the console for details.');
+                });
+        }
+
+        function showMostProfitableProduct() {
+            axios.get('/api/products/most-profitable')
+                .then(response => {
+                    const mostProfitableProduct = response.data;
+                    document.getElementById('mostProfitableProduct').innerHTML = `<p>The most profitable product is: ${mostProfitableProduct.name} (${mostProfitableProduct.code}) for ${mostProfitableProduct.price}, making ${mostProfitableProduct.profit} of profit</p>`;
+                })
+                .catch(error => {
+                    console.error('Error fetching most profitable product:', error);
+                    alert('Error fetching most profitable product. Please check the console for details.');
+                });
         }
 
         // Initial fetch of materials and products
