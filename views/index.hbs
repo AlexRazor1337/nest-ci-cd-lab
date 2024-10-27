@@ -502,7 +502,7 @@
             axios.get('/api/products/most-expensive')
                 .then(response => {
                     const mostExpensiveProduct = response.data;
-                    document.getElementById('mostExpensiveProduct').innerHTML = `<p>The most expensive product is: ${mostExpensiveProduct.name} (${mostExpensiveProduct.code}) costing ${mostExpensiveProduct.price}</p>`;
+                    document.getElementById('mostExpensiveProduct').innerHTML = `<p>The most expensive product is: ${mostExpensiveProduct.name} (${mostExpensiveProduct.productCode}) costing ${mostExpensiveProduct.price}</p>`;
                 })
                 .catch(error => {
                     console.error('Error fetching most expensive product:', error);
