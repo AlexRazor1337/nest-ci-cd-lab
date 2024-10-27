@@ -16,7 +16,7 @@ export class SalesService {
   }
 
   async findAll(): Promise<Sale[]> {
-    return this.salesRepository.find();
+    return this.salesRepository.find({ relations: ['product'] });
   }
 
   async findOne(id: number): Promise<Sale> {

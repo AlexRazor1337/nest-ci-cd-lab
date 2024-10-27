@@ -9,6 +9,9 @@ export class Sale {
   @ManyToOne(() => Product)
   product: Product;
 
+  @Column()
+  productId: number;
+
   @Column('date')
   date: Date;
 

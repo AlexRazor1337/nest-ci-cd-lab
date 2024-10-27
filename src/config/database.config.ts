@@ -5,7 +5,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   url: process.env.DATABASE_URL,
   entities: [__dirname + '/../*/*.entity{.ts,.js}'],
   synchronize: true, // Set to false in production
-  dropSchema: true,
+  // dropSchema: true,
   ssl: {
     rejectUnauthorized: false,
   }
